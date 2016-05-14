@@ -1,20 +1,3 @@
-# Basic Project Setup
-
-## Purpose
-
-Setting up a new project is always doing the same things.
-
-1. Creating a build.gradle
-2. Setting up integrationTest configuration
-3. Adding standard dependencies
-4. ... and so on.
-
-Therefore i share my basic project and keep a copy for myself here at github.com.
-
-## Configuration
-
-```groovy
-
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -81,15 +64,3 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
-
-```
-
-## HowTo
-
-If you want to use this as your starting point:
-
-1. Clone the project `git clone  https://github.com/markush81/basic-project.git yourprojectname`
-2. Remove git remote reference `git remote rm origin`
-3. Add your own origin as you need
-
-**Happy coding!**
