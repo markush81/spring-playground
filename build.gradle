@@ -21,8 +21,8 @@ compileJava {
 sourceSets {
     integrationTest {
         java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
         }
     }
 }
@@ -36,9 +36,9 @@ configurations {
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
+    it.mustRunAfter test
 }
 check.dependsOn integrationTest
-integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
@@ -57,6 +57,15 @@ dependencies {
 
     //integration testing
     integrationTestCompile 'com.h2database:h2:1.4.191'
+}
+
+// === IDEA configuration ===
+
+idea {
+    module {
+        scopes.TEST.plus += [configurations.integrationTestCompile]
+        scopes.TEST.plus += [configurations.integrationTestRuntime]
+    }
 }
 
 // === Wrapper generation ===

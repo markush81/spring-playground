@@ -11,10 +11,9 @@ Setting up a new project is always doing the same things.
 
 Therefore i share my basic project and keep a copy for myself here at github.com.
 
-## Configuration
+## build.gradle
 
 ```groovy
-
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -38,8 +37,8 @@ compileJava {
 sourceSets {
     integrationTest {
         java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
         }
     }
 }
@@ -53,9 +52,9 @@ configurations {
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
+    it.mustRunAfter test
 }
 check.dependsOn integrationTest
-integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
@@ -76,20 +75,33 @@ dependencies {
     integrationTestCompile 'com.h2database:h2:1.4.191'
 }
 
+// === IDEA configuration ===
+
+idea {
+    module {
+        scopes.TEST.plus += [configurations.integrationTestCompile]
+        scopes.TEST.plus += [configurations.integrationTestRuntime]
+    }
+}
+
 // === Wrapper generation ===
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
-
 ```
 
 ## HowTo
 
-If you want to use this as your starting point:
+If you want to use it as your starting point to develop:
 
 1. Clone the project `git clone  https://github.com/markush81/basic-project.git yourprojectname`
 2. Remove git remote reference `git remote rm origin`
-3. Add your own origin as you need
+3. Add your own origin if you need
+4. `Import project from external model` into IntelliJ IDEA or run `./gradlew idea` and `Open project` in IntelliJ IDEA
 
-**Happy coding!**
+#### Known Issues
+
+IntelliJ IDEA: *Import Project* fails to recognize integrationTest as test scope (at least since version 2016 it fails). Basically this has no great impact, except for inspections for example.
+
+### Happy coding!
