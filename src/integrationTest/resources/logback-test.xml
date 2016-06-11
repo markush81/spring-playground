@@ -5,11 +5,11 @@
         </encoder>
     </appender>
 
-    <logger name="sample.MainIntegrationTest" level="TRACE" additivity="false">
+    <logger name="org.springframework" level="ERROR" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="DEBUG">
+     <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
