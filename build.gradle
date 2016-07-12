@@ -61,7 +61,8 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
+    reports.html.destination = file("${reportsDir}/${name}")
+    reports.junitXml.destination = file("${testResultsDir}/${name}")
 }
 
 // === Dependencies ===
@@ -77,8 +78,7 @@ dependencies {
 
 idea {
     module {
-        scopes.TEST.plus += [configurations.integrationTestCompile]
-        scopes.TEST.plus += [configurations.integrationTestRuntime]
+        scopes.TEST.plus += [configurations.integrationTestCompile, configurations.integrationTestRuntime]
     }
 }
 
