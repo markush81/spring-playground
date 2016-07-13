@@ -7,6 +7,9 @@ Having a project always ready as starting point for a spring boot application or
 ## Features
 
 * Configure DispatcherServlet for loadOnStartup, so no delays on first call consumed (`ample.Application.initializeDispatcherServlet`).
-* Custom Error Handling of any exceptions (`sample.service.ErrorHandler`)
+* Custom ErrorController (`sample.service.ErrorHandler`)
+* Handle specific exceptions in `@RestController` with custom response (`sample.service.RestService.handleException`).
+* RestController Integration Test (`sample.ApplicationIntegrationTest`).
+* ... more to come!
 
 ### Happy coding!
