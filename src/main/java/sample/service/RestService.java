@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created by markus on 11/06/16.
  */
@@ -32,25 +30,23 @@ public class RestService {
     /**
      * Example for handling one specific exception, like IllegalArgumentException which code be an indicator for bad requests
      *
-     * @param request   request sent
      * @param exception exception thrown
      * @return response with status code BAD_REQUEST and exception.getMessage()
      */
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<String> handleException(HttpServletRequest request, IllegalArgumentException exception) {
-        return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleException(IllegalArgumentException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Generic handler for all other occuring exceptions
      *
-     * @param request   request sent
      * @param exception exception thrown
      * @return response with status code INTERAL_SERVER_ERROR and exception.getMessage()
      */
     @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<String> handleException(HttpServletRequest request, RuntimeException exception) {
-        return new ResponseEntity<String>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> handleException(RuntimeException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
