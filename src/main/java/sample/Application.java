@@ -17,16 +17,16 @@ public class Application {
 
     private static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) {
-        LOGGER.info("args: {}", (Object[]) args);
-        SpringApplication.run(Application.class, args);
-    }
-
     @Bean
     public static BeanFactoryPostProcessor initializeDispatcherServlet() {
         return beanFactory -> {
             BeanDefinition bean = beanFactory.getBeanDefinition(DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME);
             bean.getPropertyValues().add("loadOnStartup", 1);
         };
+    }
+
+    public static void main(String[] args) {
+        LOGGER.info("args: {}", (Object[]) args);
+        SpringApplication.run(Application.class, args);
     }
 }

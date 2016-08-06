@@ -3,10 +3,9 @@ package sample.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import sample.service.model.Greeting;
 
 /**
  * Created by markus on 11/06/16.
@@ -15,16 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/service", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class RestService {
 
-    @RequestMapping(path = "/hello/{user}")
-    public ResponseEntity<?> simpleThing(@PathVariable String user) {
-        if ("unknown".equals(user)) {
+    @GetMapping(path = "/hello/{user}")
+    public ResponseEntity<sample.service.model.Greeting> simpleThing(@PathVariable String user) {
+        if (user == null || StringUtils.isEmpty(user) || "unknown".equals(user)) {
             throw new IllegalArgumentException("This user is invalid!");
         }
-        return new ResponseEntity<Object>(greet(user), HttpStatus.OK);
-    }
-
-    String greet(String user) {
-        return String.format("Hello %s!", user);
+        return new ResponseEntity<>(new sample.service.model.Greeting(user), HttpStatus.OK);
     }
 
     /**
