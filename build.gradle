@@ -2,6 +2,7 @@ buildscript {
     repositories {
         mavenCentral()
     }
+    //noinspection GroovyAssignabilityCheck
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
     }
@@ -19,13 +20,10 @@ repositories {
 
 // === JAVA configuration ===
 
-//noinspection GroovyAssignabilityCheck
-compileJava {
-    //noinspection GroovyAccessibility
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    //noinspection GroovyAccessibility
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = JavaVersion.VERSION_1_8
+//noinspection GroovyUnusedAssignment
+targetCompatibility = JavaVersion.VERSION_1_8
 
 // === JAR Properties ===
 
@@ -58,19 +56,14 @@ configurations {
 task integrationTest(type: Test) {
     //noinspection GroovyAccessibility
     testClassesDir = sourceSets.integrationTest.output.classesDir
-    //noinspection GroovyAccessibility
     classpath = sourceSets.integrationTest.runtimeClasspath
     it.mustRunAfter test
 }
 check.dependsOn integrationTest
 
-tasks.withType(Test) {
-    reports.html.destination = file("${reportsDir}/${name}")
-    reports.junitXml.destination = file("${testResultsDir}/${name}")
-}
-
 // === Dependencies ===
 
+//noinspection GroovyAssignabilityCheck
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
 
@@ -89,5 +82,5 @@ idea {
 // === Wrapper generation ===
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
+    gradleVersion = '3.0'
 }
