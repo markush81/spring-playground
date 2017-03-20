@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class ApplicationIntegrationTest {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ApplicationIntegrationTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationIntegrationTest.class);
 
     private MockMvc mvc;
 

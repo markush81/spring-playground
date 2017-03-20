@@ -23,11 +23,14 @@ public class Greeting {
         return String.format(MESSAGE, name);
     }
 
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Greeting greeting = (Greeting) o;
         return Objects.equals(name, greeting.name);
     }
@@ -36,7 +39,6 @@ public class Greeting {
     public int hashCode() {
         return Objects.hash(name);
     }
-
 
     @Override
     public String toString() {
