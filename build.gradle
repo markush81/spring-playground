@@ -4,7 +4,7 @@ buildscript {
     }
     //noinspection GroovyAssignabilityCheck
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
     }
 }
 
@@ -13,21 +13,15 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 // === Repository config ===
-
 repositories {
     mavenCentral()
 }
 
 // === JAVA configuration ===
-
-//noinspection GroovyUnusedAssignment
 sourceCompatibility = JavaVersion.VERSION_1_8
-//noinspection GroovyUnusedAssignment
 targetCompatibility = JavaVersion.VERSION_1_8
 
 // === JAR Properties ===
-
-//noinspection GroovyAssignabilityCheck
 jar {
     manifest {
         attributes("Implementation-Title": name,
@@ -35,53 +29,25 @@ jar {
     }
 }
 
-// === Integration Test Configuration ===
-
-//noinspection GroovyAssignabilityCheck
-sourceSets {
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-        }
-    }
-}
-
-//noinspection GroovyAssignabilityCheck
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
-
-task integrationTest(type: Test) {
-    //noinspection GroovyAccessibility
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    it.mustRunAfter test
-}
-check.dependsOn integrationTest
-
 // === Dependencies ===
-
-//noinspection GroovyAssignabilityCheck
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
-
     //testing
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
-// === IDEA configuration ===
+test {
+    exclude '**/*IntegrationTest*'
 
-idea {
-    module {
-        scopes.TEST.plus += [configurations.integrationTestCompile, configurations.integrationTestRuntime]
-    }
+}
+
+task integrationTest(type: Test) {
+    include '**/*IntegrationTest*'
+//    it.mustRunAfter test
 }
 
 // === Wrapper generation ===
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
-    distributionUrl = 'https://services.gradle.org/distributions/gradle-3.4.1-all.zip'
+    gradleVersion = '3.5'
+    distributionUrl = 'https://services.gradle.org/distributions/gradle-3.5-all.zip'
 }
