@@ -43,7 +43,7 @@ test {
 
 task integrationTest(type: Test) {
     include '**/*IntegrationTest*'
-//    it.mustRunAfter test
+    it.mustRunAfter test
 }
 
 // === Wrapper generation ===
