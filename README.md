@@ -6,12 +6,12 @@ Having a project, always ready, as starting point for a Spring (Boot) Applicatio
 
 ## Features
 
-* Configure DispatcherServlet for `loadOnStartup`, so no delays on first call consumed (`sample.Application.initializeDispatcherServlet`).
-** replaced by `spring.mvc.servlet.load-on-startup: 1`
-* Custom ErrorController (`sample.service.ErrorHandler`)
 * Spring Boot 1.5.x: in case of "Application Failed to start" the process itself does not exit, therefore added `ApplicationFailedEvent` listener to call `System.exit(-1)` in this case.
-* Handle specific exceptions in `@RestController` with custom response (`sample.service.Greeting.handleException`).
-* RestController Integration Test (`ApplicationIntegrationTest`).
+* Spring Boot Graceful Shutdown [Spring Boot Issue 4657](https://github.com/spring-projects/spring-boot/issues/4657).
+* Configure DispatcherServlet for `loadOnStartup`: do not delay first request with initialization.
+* Custom ErrorController (`sample.service.error.CustomErrorHandler`): replace whitelabel error page.
+* Custom ErrorAdvice (`sample.service.error.CustomErrorAdvice`): handle your exception as you need.
+* RestController Integration Test (`ApplicationIntegrationTest`) example.
 * ... more to come!
 
 

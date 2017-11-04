@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sample.persistence.UserRepository;
 import sample.service.RestService;
+import sample.service.error.CustomErrorAdvice;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,7 +37,10 @@ public class ApplicationIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        mvc = MockMvcBuilders.standaloneSetup(new RestService(userRepository)).build();
+        mvc = MockMvcBuilders
+                .standaloneSetup(new RestService(userRepository))
+                .setControllerAdvice(new CustomErrorAdvice())
+                .build();
     }
 
     @After

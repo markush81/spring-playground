@@ -1,8 +1,4 @@
-package sample.service;
-
-/**
- * Created by markus on 12/07/16.
- */
+package sample.service.error;
 
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -12,8 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RestController
-public class ErrorHandler implements ErrorController {
+/**
+ * Created by markus on 12/07/16.
+ */
+//@RestController
+public class CustomErrorHandler implements ErrorController {
 
     private static final String ERROR_PATH = "/error";
 

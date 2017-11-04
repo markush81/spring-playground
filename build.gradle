@@ -10,7 +10,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 // === Repository config ===
 repositories {
@@ -24,8 +24,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 // === JAR Properties ===
 jar {
     manifest {
-        attributes("Implementation-Title": name,
-                "Implementation-Version": version)
+        attributes("Implementation-Title": name, "Implementation-Version": version)
     }
 }
 
@@ -41,7 +40,6 @@ dependencies {
 
 test {
     exclude '**/*IntegrationTest*'
-
 }
 
 task integrationTest(type: Test) {
@@ -49,8 +47,13 @@ task integrationTest(type: Test) {
     it.mustRunAfter test
 }
 
+// === Spring Boot Configuration ===
+springBoot {
+    executable = true
+}
+
 // === Wrapper generation ===
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
-    distributionUrl = 'https://services.gradle.org/distributions/gradle-4.2.1-all.zip'
+    gradleVersion = '4.3'
+    distributionUrl = 'https://services.gradle.org/distributions/gradle-4.3-all.zip'
 }
