@@ -1,6 +1,7 @@
 package sample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import sample.persistence.UserRepository;
 import sample.persistence.model.User;
 import sample.service.model.Greeting;
+
+import java.util.Optional;
 
 /**
  * Created by markus on 11/06/16.
@@ -44,10 +47,7 @@ public class RestService {
 
     @GetMapping(path = "/users/{id}")
     public ResponseEntity<User> get(@RequestParam Long id) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        Optional<User> user = userRepository.findById(id);
+        return user.map(u -> new ResponseEntity<>(u, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

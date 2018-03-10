@@ -6,7 +6,6 @@ Having a project, always ready, as starting point for a Spring (Boot) Applicatio
 
 ## Features
 
-* Spring Boot 1.5.x: in case of "Application Failed to start" the process itself does not exit, therefore added `ApplicationFailedEvent` listener to call `System.exit(-1)` in this case.
 * Spring Boot Graceful Shutdown [Spring Boot Issue 4657](https://github.com/spring-projects/spring-boot/issues/4657).
 * Configure DispatcherServlet for `loadOnStartup`: do not delay first request with initialization.
 * Custom ErrorController (`sample.service.error.CustomErrorHandler`): replace whitelabel error page.

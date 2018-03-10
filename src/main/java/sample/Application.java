@@ -5,15 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.context.event.ApplicationFailedEvent;
+import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -29,18 +27,12 @@ public class Application {
 
     public static void main(String[] args) {
         LOGGER.info("args: {}", (Object[]) args);
-        new SpringApplicationBuilder(Application.class)
-                .listeners((ApplicationListener<ApplicationFailedEvent>) event -> System.exit(-1))
-                .run(args);
+        new SpringApplicationBuilder(Application.class).run(args);
     }
 
     @Bean
-    public EmbeddedServletContainerCustomizer tomcatCustomizer(TomcatGracefulShutdown tomcatGracefulShutdown) {
-        return container -> {
-            if (container instanceof TomcatEmbeddedServletContainerFactory) {
-                ((TomcatEmbeddedServletContainerFactory) container).addConnectorCustomizers(tomcatGracefulShutdown);
-            }
-        };
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatGracefulShutdown(TomcatGracefulShutdown tomcatGracefulShutdown) {
+        return factory -> factory.addConnectorCustomizers(tomcatGracefulShutdown);
     }
 
     @Component
