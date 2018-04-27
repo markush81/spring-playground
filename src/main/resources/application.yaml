@@ -1,7 +1,0 @@
-server:
-  error.whitelabel.enabled: false
-
-spring:
-  jackson:
-    serialization.indent_output: true
-  mvc.servlet.load-on-startup: 1

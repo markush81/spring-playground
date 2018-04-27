@@ -1,52 +1,82 @@
-plugins {
-    id 'org.springframework.boot' version '2.0.0.RELEASE'
-}
-
-apply plugin: 'idea'
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-
-// === Repository config ===
-repositories {
-    mavenCentral()
-}
-
-// === JAVA configuration ===
-sourceCompatibility = JavaVersion.VERSION_1_9
-targetCompatibility = JavaVersion.VERSION_1_9
-
-// === JAR Properties ===
-jar {
-    manifest {
-        attributes("Implementation-Title": name, "Implementation-Version": version)
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE")
     }
 }
 
-// === Dependencies ===
-dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'javax.xml.bind:jaxb-api'
-    compile 'com.h2database:h2'
-    //testing
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+allprojects {
+    apply plugin: 'idea'
+
 }
 
-test {
-    exclude '**/*IntegrationTest*'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'io.spring.dependency-management'
+
+    // === Repository config ===
+    repositories {
+        mavenCentral()
+    }
+
+    // === JAVA configuration ===
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    // === JAR Properties ===
+    jar {
+        manifest {
+            attributes("Implementation-Title": name, "Implementation-Version": version)
+        }
+    }
+
+
+    test {
+        exclude '**/*IntegrationTest*'
+    }
+
+    task integrationTest(type: Test) {
+        include '**/*IntegrationTest*'
+        it.mustRunAfter test
+    }
 }
 
-task integrationTest(type: Test) {
-    include '**/*IntegrationTest*'
-    it.mustRunAfter test
+project(':module') {
+
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter:2.0.1.RELEASE'
+        testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE'
+    }
 }
 
-// === Spring Boot Configuration ===
-bootJar {
+project(':application') {
+    apply plugin: 'org.springframework.boot'
+
+    // === Dependencies ===
+    dependencies {
+        compile project(':module')
+
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+        compile 'org.springframework.boot:spring-boot-starter-actuator'
+
+        compile 'com.h2database:h2:1.4.197'
+        //testing
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+        testCompile 'com.h2database:h2'
+    }
+
+    // === Spring Boot Configuration ===
+    bootJar {
+        launchScript()
+    }
 }
 
 // === Wrapper generation ===
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
-    distributionUrl = 'https://services.gradle.org/distributions/gradle-4.6-all.zip'
+    gradleVersion = '4.7'
+    distributionType  = Wrapper.DistributionType.ALL
 }

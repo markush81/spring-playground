@@ -3,15 +3,21 @@ package sample;
 import org.apache.catalina.connector.Connector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Component;
+import sample.configuration.ApplicationConfiguration;
+import sample.configuration.SubModuleConfiguration;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -21,11 +27,19 @@ import java.util.concurrent.TimeUnit;
  * Created by markus on 14/05/16.
  */
 @SpringBootApplication
-public class Application {
+public class Application implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+    @Autowired
+    private SubModuleConfiguration subModuleConfiguration;
+
+    @Autowired
+    private ApplicationConfiguration applicationConfiguration;
+
     public static void main(String[] args) {
+
+
         LOGGER.info("args: {}", (Object[]) args);
         new SpringApplicationBuilder(Application.class).run(args);
     }
@@ -33,6 +47,13 @@ public class Application {
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatGracefulShutdown(TomcatGracefulShutdown tomcatGracefulShutdown) {
         return factory -> factory.addConnectorCustomizers(tomcatGracefulShutdown);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        LOGGER.info("Application Configuration: {}", applicationConfiguration);
+        LOGGER.info("Submodule Configuration: {}", subModuleConfiguration);
+
     }
 
     @Component

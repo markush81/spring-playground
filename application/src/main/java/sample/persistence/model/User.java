@@ -1,16 +1,22 @@
 package sample.persistence.model;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
+@Table(name = "SAMPLE_USER") //, schema = "SAMPLE"
 public class User {
 
     @Id
+    @Column(name = "ID", unique = true)
     private Long id;
+    @Column(name = "FIRSTNAME")
     private String firstName;
+    @Column(name = "LASTNAME")
     private String lastName;
 
     public User() {
