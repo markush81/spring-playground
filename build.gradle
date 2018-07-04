@@ -1,5 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.0.3.RELEASE'
+    id "com.palantir.docker" version "0.20.1"
+    id "com.palantir.docker-run" version "0.20.1"
 }
 
 apply plugin: 'idea'
@@ -37,6 +39,18 @@ task integrationTest(type: Test) {
 // === Spring Boot Configuration ===
 bootJar {
     launchScript()
+}
+
+// === Docker ===
+dockerRun {
+    name bootJar.baseName
+    image 'openjdk:10-jdk'
+    volumes "${project.buildDir}/libs": '/tmp'
+    ports '8080:8080'
+    daemonize true
+    clean true
+    env 'JAVA_OPTS': '-Djava.security.egd=file:/dev/./urandom'
+    command "/tmp/${bootJar.archiveName}"
 }
 
 // === Wrapper generation ===
