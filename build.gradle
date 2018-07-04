@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.0.0.RELEASE'
+    id 'org.springframework.boot' version '2.0.3.RELEASE'
 }
 
 apply plugin: 'idea'
@@ -12,22 +12,15 @@ repositories {
 }
 
 // === JAVA configuration ===
-sourceCompatibility = JavaVersion.VERSION_1_9
-targetCompatibility = JavaVersion.VERSION_1_9
-
-// === JAR Properties ===
-jar {
-    manifest {
-        attributes("Implementation-Title": name, "Implementation-Version": version)
-    }
-}
+sourceCompatibility = JavaVersion.VERSION_1_10
+targetCompatibility = JavaVersion.VERSION_1_10
 
 // === Dependencies ===
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'javax.xml.bind:jaxb-api'
-    compile 'com.h2database:h2'
+    runtime 'javax.xml.bind:jaxb-api'
+    runtime 'com.h2database:h2'
     //testing
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -43,10 +36,10 @@ task integrationTest(type: Test) {
 
 // === Spring Boot Configuration ===
 bootJar {
+    launchScript()
 }
 
 // === Wrapper generation ===
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
-    distributionUrl = 'https://services.gradle.org/distributions/gradle-4.6-all.zip'
+    distributionType = Wrapper.DistributionType.ALL
 }
