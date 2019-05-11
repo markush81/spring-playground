@@ -11,9 +11,6 @@ Having a project, always ready, as starting point for a Spring (Boot) Applicatio
 * Custom ErrorController (`sample.service.error.CustomErrorHandler`): replace whitelabel error page.
 * Custom ErrorAdvice (`sample.service.error.CustomErrorAdvice`): handle your exception as you need.
 * RestController Integration Test (`ApplicationIntegrationTest`) example.
-* Docker, simply run `./gradlew dockerRun` (as well as `./gradlew dockerStop`) (of course you need to have docker installed and running).
-* ... more to come!
-
 
 ## Notes
 

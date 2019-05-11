@@ -1,7 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.0.3.RELEASE'
-    id "com.palantir.docker" version "0.20.1"
-    id "com.palantir.docker-run" version "0.20.1"
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'com.google.cloud.tools.jib' version '1.2.0'
 }
 
 apply plugin: 'idea'
@@ -14,17 +13,19 @@ repositories {
 }
 
 // === JAVA configuration ===
-sourceCompatibility = JavaVersion.VERSION_1_10
-targetCompatibility = JavaVersion.VERSION_1_10
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 // === Dependencies ===
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtime 'javax.xml.bind:jaxb-api'
     runtime 'com.h2database:h2'
     //testing
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
@@ -37,23 +38,22 @@ task integrationTest(type: Test) {
 }
 
 // === Spring Boot Configuration ===
-bootJar {
-    launchScript()
+springBoot {
+	buildInfo()
 }
 
-// === Docker ===
-dockerRun {
-    name bootJar.baseName
-    image 'openjdk:10-jdk'
-    volumes "${project.buildDir}/libs": '/tmp'
-    ports '8080:8080'
-    daemonize true
-    clean true
-    env 'JAVA_OPTS': '-Djava.security.egd=file:/dev/./urandom'
-    command "/tmp/${bootJar.archiveName}"
-}
-
-// === Wrapper generation ===
-task wrapper(type: Wrapper) {
+// === Wrapper Configuration ===
+wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+// === jib Configuration ===
+jib {
+    to {
+        image = 'spring-playground'
+    }
+    container {
+        jvmFlags = ['-Xms512m']
+//        ports = ['8080']
+    }
 }
