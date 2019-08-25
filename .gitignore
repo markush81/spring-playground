@@ -9,8 +9,10 @@ gradle-app.setting
 .gradletasknamecache
 
 # IntelliJ IDEA
-.idea
+.idea/*
 *.iml
+!.idea/runConfigurations
 
 # Project Runtime Files
 log
+
