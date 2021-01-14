@@ -16,3 +16,5 @@ gradle-app.setting
 # Project Runtime Files
 log
 
+**/.rootCA.key
+**/*.pem

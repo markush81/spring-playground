@@ -1,0 +1,8 @@
+// === Plugin repository config ===
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}

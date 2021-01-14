@@ -1,13 +1,13 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 }
-
-apply plugin: 'idea'
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
 
 // === Repository config ===
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -24,6 +24,11 @@ dependencies {
     runtime 'com.h2database:h2'
     //testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 test {
@@ -31,6 +36,7 @@ test {
 }
 
 task integrationTest(type: Test) {
+    group 'verification'
     include '**/*IntegrationTest*'
     it.mustRunAfter test
 }
@@ -46,21 +52,16 @@ wrapper {
 }
 
 bootBuildImage {
-    targetJavaVersion = JavaVersion.VERSION_11
-    verboseLogging = true
-    environment = ["JAVA_OPTS" : "-Dfile.encoding=UTF-8"]
-}
+    verboseLogging = false
 
-// === jib Configuration ===
-//jib {
-//    from {
-//        image = 'gcr.io/distroless/java:11-debug'
-//    }
-//    to {
-//        image = 'spring-playground'
-//    }
-//    container {
-//        jvmFlags = ['-Xms512m']
-//        ports = ['8080']
-//    }
-//}
+    //fix version of used images
+    builder = "paketobuildpacks/builder@sha256:2fbe23a13024af36db7c05b00b58361f4e4aed8eb679519daafd035f653098fb"
+    runImage = "paketobuildpacks/run@sha256:0cb3de382afbd5da1e01515f55ab017011ac4d76c77fabb44006f0d0546b2722"
+    environment = [
+            "BP_DEBUG_ENABLED"                     : "true",
+            "BPE_DELIM_JAVA_TOOL_OPTIONS"          : " ",
+            "BPE_JAVA_TOOL_OPTIONS"                : "-Dfile.encoding=UTF-8",
+            "BPE_BPL_SPRING_CLOUD_BINDINGS_ENABLED": "false"
+    ]
+    publish = false
+}
