@@ -1,9 +1,9 @@
 package sample.service.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Objects;
 
 /**
  * Created by markus on 06/08/16.
@@ -11,8 +11,8 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Greeting {
 
-    private String name;
     private static final String MESSAGE = "Hello %s!";
+    private final String name;
 
     public Greeting(String name) {
         this.name = name;
@@ -21,6 +21,11 @@ public class Greeting {
     @JsonProperty
     public String getMessage() {
         return String.format(MESSAGE, name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
@@ -33,11 +38,6 @@ public class Greeting {
         }
         Greeting greeting = (Greeting) o;
         return Objects.equals(name, greeting.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 
     @Override

@@ -1,14 +1,11 @@
 package sample.service.model;
 
 
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-/**
- * Created by markus on 11/06/16.
- */
+import org.junit.jupiter.api.Test;
+
 public class GreetingModelTest {
 
     @Test

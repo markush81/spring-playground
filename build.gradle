@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.4.4'
+    id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'com.google.cloud.tools.jib' version '3.0.0'
+//    id 'com.google.cloud.tools.jib' version '3.1.4'
 }
 
 // === Repository config ===
@@ -13,8 +13,8 @@ repositories {
 
 // === JAVA configuration ===
 compileJava {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 // === Dependencies ===
@@ -55,8 +55,8 @@ bootBuildImage {
     verboseLogging = false
 
     //fix version of used images
-    builder = "paketobuildpacks/builder@sha256:2fbe23a13024af36db7c05b00b58361f4e4aed8eb679519daafd035f653098fb"
-    runImage = "paketobuildpacks/run@sha256:0cb3de382afbd5da1e01515f55ab017011ac4d76c77fabb44006f0d0546b2722"
+    builder = 'paketobuildpacks/builder@sha256:4797e9561534e3b628da62201555a3090db077266314e6fa175c2d9187f8429d'
+    runImage = 'paketobuildpacks/run@sha256:781ccd109ecd2b800422697313035a2c37378ff26b6fa97d5205566197bcbb79'
     environment = [
             "BP_DEBUG_ENABLED"                     : "true",
             "BPE_DELIM_JAVA_TOOL_OPTIONS"          : " ",
@@ -66,5 +66,8 @@ bootBuildImage {
     publish = false
 }
 
-jib {
-}
+//jib {
+//    to {
+//        image = "spring-playground"
+//    }
+//}
