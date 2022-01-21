@@ -5,9 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by markus on 06/08/16.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Greeting {
 
