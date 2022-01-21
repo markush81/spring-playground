@@ -1,7 +1,15 @@
 server:
-  error.whitelabel.enabled: false
+  error:
+    whitelabel:
+      enabled: false
+  shutdown: graceful
 
 spring:
   jackson:
-    serialization.indent_output: true
-  mvc.servlet.load-on-startup: 1
+    serialization:
+      indent_output: true
+  mvc:
+    servlet:
+      load-on-startup: 1
+  jpa:
+    open-in-view: true
