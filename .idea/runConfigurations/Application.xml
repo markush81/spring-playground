@@ -2,8 +2,14 @@
   <configuration default="false" name="Application" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:8200" />
+      <env name="OTEL_LOGS_EXPORTER" value="otlp" />
+      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=spring-playground" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="sample.Application" />
     <module name="spring-playground.main" />
+    <option name="PROGRAM_PARAMETERS" value="-javaagent:" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="sample.*" />
