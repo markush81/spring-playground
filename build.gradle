@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'com.google.cloud.tools.jib' version '3.2.1'
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'com.google.cloud.tools.jib' version '3.3.0'
 }
 
 // === Repository config ===
@@ -23,10 +23,10 @@ configurations{
 
 // === Dependencies ===
 dependencies {
-    otel 'io.opentelemetry.javaagent:opentelemetry-javaagent:1.15.0'
+    otel 'io.opentelemetry.javaagent:opentelemetry-javaagent:1.18.0'
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.15.0")
-    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.15.0-alpha')
+    implementation platform("io.opentelemetry:opentelemetry-bom:1.18.0")
+    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.18.0-alpha')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -60,8 +60,8 @@ springBoot {
 }
 
 bootRun {
-//    jvmArgs("-javaagent:${configurations.otel.asPath}")
-    environment("OTEL_EXPORTER_OTLP_ENDPOINT","http://localhost:8200")
+    jvmArgs("-javaagent:${configurations.otel.asPath}")
+    environment("OTEL_EXPORTER_OTLP_ENDPOINT","http://localhost:4317")
     environment("OTEL_METRICS_EXPORTER","otlp")
     environment("OTEL_LOGS_EXPORTER","otlp")
     environment("OTEL_TRACES_EXPORTER","otlp")

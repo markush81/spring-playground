@@ -3,13 +3,14 @@
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:8200" />
+      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:4317" />
       <env name="OTEL_LOGS_EXPORTER" value="otlp" />
       <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=spring-playground" />
+      <env name="OTEL_METRICS_EXPORTER" value="otlp" />
+      <env name="OTEL_TRACES_EXPORTER" value="otlp" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="sample.Application" />
     <module name="spring-playground.main" />
-    <option name="PROGRAM_PARAMETERS" value="-javaagent:" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="sample.*" />
