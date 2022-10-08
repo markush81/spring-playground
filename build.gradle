@@ -17,7 +17,7 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-configurations{
+configurations {
     otel
 }
 
@@ -58,17 +58,21 @@ task integrationTest(type: Test) {
 
 // === Spring Boot Configuration ===
 springBoot {
-	buildInfo()
+    buildInfo {
+        properties {
+            time = null
+        }
+    }
 }
 
 bootRun {
 //    jvmArgs("-javaagent:${configurations.otel.asPath}")
-    environment("OTEL_EXPORTER_OTLP_ENDPOINT","http://localhost:4317")
-    environment("OTEL_METRICS_EXPORTER","otlp")
-    environment("OTEL_LOGS_EXPORTER","otlp")
-    environment("OTEL_TRACES_EXPORTER","otlp")
-    environment("OTEL_SERVICE_NAME","${project.name}")
-    environment("OTEL_RESOURCE_ATTRIBUTES","service.version=${project.version},deployment.environment=dev")
+    environment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
+    environment("OTEL_METRICS_EXPORTER", "otlp")
+    environment("OTEL_LOGS_EXPORTER", "otlp")
+    environment("OTEL_TRACES_EXPORTER", "otlp")
+    environment("OTEL_SERVICE_NAME", "${project.name}")
+    environment("OTEL_RESOURCE_ATTRIBUTES", "service.version=${project.version},deployment.environment=dev")
 }
 
 // === Wrapper Configuration ===
@@ -81,18 +85,27 @@ bootBuildImage {
     verboseLogging = false
 
     //fix version of used images
-    builder = 'paketobuildpacks/builder@sha256:4797e9561534e3b628da62201555a3090db077266314e6fa175c2d9187f8429d'
-    runImage = 'paketobuildpacks/run@sha256:781ccd109ecd2b800422697313035a2c37378ff26b6fa97d5205566197bcbb79'
+    builder = 'paketobuildpacks/builder@sha256:fe33bca35ffe3c560b0a83e7a923ef51ac0b08c48d414d49523e6cc085f9a301'
+    runImage = 'paketobuildpacks/run@sha256:94dcde503f31bfe2df0a06fe77c13af2adde688322f4c5e39142878b35b5ad66'
     environment = [
-            "BP_DEBUG_ENABLED"                     : "true",
-            "BPE_DELIM_JAVA_TOOL_OPTIONS"          : " ",
-            "BPE_JAVA_TOOL_OPTIONS"                : "-Dfile.encoding=UTF-8",
-            "BPE_BPL_SPRING_CLOUD_BINDINGS_ENABLED": "false"
+            "BPL_DEBUG_ENABLED"                 : "true",
+            "BPE_DELIM_JAVA_TOOL_OPTIONS"       : " ",
+            "BPE_APPEND_JAVA_TOOL_OPTIONS"      : "-Dfile.encoding=UTF-8",
+            "BP_SPRING_CLOUD_BINDINGS_DISABLED" : "true",
+            "BPL_SPRING_CLOUD_BINDINGS_DISABLED": "true"
     ]
     publish = false
 }
 
 jib {
+//    from {
+//        platforms {
+//            platform {
+//                architecture = "arm64"
+//                os = "linux"
+//            }
+//        }
+//    }
     to {
         image = "spring-playground"
     }
