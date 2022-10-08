@@ -28,8 +28,10 @@ dependencies {
     implementation platform("io.opentelemetry:opentelemetry-bom:1.18.0")
     implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.18.0-alpha')
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
+
     implementation('io.opentelemetry:opentelemetry-api')
     implementation('io.opentelemetry:opentelemetry-sdk-extension-autoconfigure')
 
@@ -60,7 +62,7 @@ springBoot {
 }
 
 bootRun {
-    jvmArgs("-javaagent:${configurations.otel.asPath}")
+//    jvmArgs("-javaagent:${configurations.otel.asPath}")
     environment("OTEL_EXPORTER_OTLP_ENDPOINT","http://localhost:4317")
     environment("OTEL_METRICS_EXPORTER","otlp")
     environment("OTEL_LOGS_EXPORTER","otlp")

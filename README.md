@@ -11,6 +11,7 @@ Having a project, always ready, as starting point for a Spring (Boot) Applicatio
 * Custom ErrorAdvice (`sample.service.error.CustomErrorAdvice`): handle your exception as you need.
 * RestController Integration Test (`ApplicationIntegrationTest`) example.
 * Spring `bootBuildImage` example with explanation how to add custom CA(s).
+* Spring Kafka Reset Offset on-demand (activate with `spring.profiles.active=kafka`)
 
 ## `bootBuildImage`
 
