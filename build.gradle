@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.4'
-    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
-    id 'com.google.cloud.tools.jib' version '3.3.0'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'com.google.cloud.tools.jib' version '3.3.1'
 }
 
 // === Repository config ===
@@ -23,10 +23,10 @@ configurations {
 
 // === Dependencies ===
 dependencies {
-    otel 'io.opentelemetry.javaagent:opentelemetry-javaagent:1.18.0'
+    otel 'io.opentelemetry.javaagent:opentelemetry-javaagent'
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.18.0")
-    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.18.0-alpha')
+    implementation platform("io.opentelemetry:opentelemetry-bom:1.22.0")
+    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.22.0-alpha')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -82,17 +82,15 @@ wrapper {
 
 
 bootBuildImage {
-    verboseLogging = false
+    verboseLogging = true
 
     //fix version of used images
-    builder = 'paketobuildpacks/builder@sha256:fe33bca35ffe3c560b0a83e7a923ef51ac0b08c48d414d49523e6cc085f9a301'
-    runImage = 'paketobuildpacks/run@sha256:94dcde503f31bfe2df0a06fe77c13af2adde688322f4c5e39142878b35b5ad66'
+    builder = 'paketobuildpacks/builder@sha256:d0c6a5fa9dafc0271a00d7831ad40cc88d0471fd3d8c71c52b41c4045ee8469a'
+    runImage = 'paketobuildpacks/run@sha256:ec0263dc98a8c785f4a6750597de8857efd2852fc6544494ff2598426cf7143c'
     environment = [
-            "BPL_DEBUG_ENABLED"                 : "true",
             "BPE_DELIM_JAVA_TOOL_OPTIONS"       : " ",
             "BPE_APPEND_JAVA_TOOL_OPTIONS"      : "-Dfile.encoding=UTF-8",
             "BP_SPRING_CLOUD_BINDINGS_DISABLED" : "true",
-            "BPL_SPRING_CLOUD_BINDINGS_DISABLED": "true"
     ]
     publish = false
 }

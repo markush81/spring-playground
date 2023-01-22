@@ -11,6 +11,7 @@
     </envs>
     <option name="MAIN_CLASS_NAME" value="sample.Application" />
     <module name="spring-playground.main" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=kafka" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="sample.*" />

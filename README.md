@@ -26,7 +26,7 @@ Add your CA(s) as PEM to `bindings/ca-certificates`.
 Run the containern with `--env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates"`
 
 ```bash
-docker container run --rm --name spring-playground --env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates" -p 8080:8080 spring-playground 
+docker container run --rm --name spring-playground --env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates" -p 8080:8080 docker.io/library/spring-playground:latest  
 ```
 In output - at the very beginning - sth. like 
 
@@ -51,7 +51,7 @@ you can check truststore content:
 You will find one which has an alias starting with `/tmp/ca-certificates....` which is yours.
 
 ```
-cnb@54a0707470ca:/$ /layers/paketo-buildpacks_bellsoft-liberica/jre/bin/keytool -list -cacerts -alias /tmp/ca-certificates979321829/954ac54b.0-0
+cnb@54a0707470ca:/$ /layers/paketo-buildpacks_bellsoft-liberica/jre/bin/keytool -list -cacerts -alias /tmp/ca-certificates1242952937/954ac54b.0-0
 Enter keystore password:
 /tmp/ca-certificates979321829/954ac54b.0-0, Jan 1, 1980, trustedCertEntry,
 Certificate fingerprint (SHA-256): CA:DB:CB:FC:DA:10:FB:36:7D:1F:7F:9D:7C:BF:EF:E7:16:AB:CC:20:9C:B5:B4:DE:62:7E:12:92:50:EF:E6:4E
