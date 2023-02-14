@@ -25,8 +25,8 @@ configurations {
 dependencies {
     otel 'io.opentelemetry.javaagent:opentelemetry-javaagent'
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.22.0")
-    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.22.0-alpha')
+    implementation platform("io.opentelemetry:opentelemetry-bom:1.23.0")
+    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.23.0-alpha')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
