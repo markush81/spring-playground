@@ -34,7 +34,7 @@ public class KafkaResetOffsetController {
     private AdminClient adminClient;
 
     KafkaResetOffsetController(final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry, final KafkaProperties kafkaProperties) {
-        this.adminClient = AdminClient.create(Map.of(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers()));
+        this.adminClient = AdminClient.create(kafkaProperties.buildAdminProperties());
         this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
     }
 
