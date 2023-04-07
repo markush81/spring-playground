@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.google.cloud.tools.jib' version '3.3.1'
     id "com.gorylenko.gradle-git-properties" version "2.4.1"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
 }
 
 // === Repository config ===
@@ -22,12 +23,19 @@ configurations {
     otel
 }
 
+// === Properties ===
+
+ext {
+    otelVersion = '1.24.0'
+    mainClassName = 'sample.Application'
+}
+
 // === Dependencies ===
 dependencies {
-    otel 'io.opentelemetry.javaagent:opentelemetry-javaagent'
+    otel "io.opentelemetry.javaagent:opentelemetry-javaagent:$otelVersion"
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.24.0")
-    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.24.0-alpha')
+    implementation platform("io.opentelemetry:opentelemetry-bom:$otelVersion")
+    implementation platform("io.opentelemetry:opentelemetry-bom-alpha:$otelVersion-alpha")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -57,8 +65,48 @@ tasks.register("integrationTest", Test) {
     it.mustRunAfter test
 }
 
+// ==== Run parameters
+
+def env = [
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317",
+    "OTEL_METRICS_EXPORTER"      : "otlp",
+    "OTEL_LOGS_EXPORTER"         : "otlp",
+    "OTEL_TRACES_EXPORTER"       : "otlp",
+    "OTEL_SERVICE_NAME"          : project.name,
+    "OTEL_RESOURCE_ATTRIBUTES"   : "service.version=" + project.version + ",deployment.environment=dev"
+]
+
+
+// ==== IDEA configuration ===
+
+import org.gradle.internal.os.OperatingSystem
+import org.jetbrains.gradle.ext.Application
+import org.jetbrains.gradle.ext.JUnit
+
+import static org.jetbrains.gradle.ext.ActionDelegationConfig.TestRunner.PLATFORM
+
+idea.project.settings {
+    delegateActions {
+        delegateBuildRunToGradle = false
+        testRunner = PLATFORM
+    }
+    runConfigurations {
+        "Application"(Application) {
+            mainClass("$mainClassName")
+            moduleRef(project,sourceSets.main)
+//            jvmArgs("-javaagent:${configurations.otel.asPath}")
+            envs(env)
+            workingDirectory("\$MODULE_WORKING_DIR\$")
+        }
+
+        defaults(JUnit) {
+        }
+    }
+}
+
 // === Spring Boot Configuration ===
 springBoot {
+    mainClass = "$mainClassName"
     buildInfo {
         properties {
             time = null
@@ -68,12 +116,7 @@ springBoot {
 
 bootRun {
 //    jvmArgs("-javaagent:${configurations.otel.asPath}")
-    environment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
-    environment("OTEL_METRICS_EXPORTER", "otlp")
-    environment("OTEL_LOGS_EXPORTER", "otlp")
-    environment("OTEL_TRACES_EXPORTER", "otlp")
-    environment("OTEL_SERVICE_NAME", "${project.name}")
-    environment("OTEL_RESOURCE_ATTRIBUTES", "service.version=${project.version},deployment.environment=dev")
+    environment(env)
 }
 
 // === Wrapper Configuration ===
@@ -86,17 +129,15 @@ bootBuildImage {
     verboseLogging = true
 
     //fix version of used images
-    builder = 'paketobuildpacks/builder@sha256:d0c6a5fa9dafc0271a00d7831ad40cc88d0471fd3d8c71c52b41c4045ee8469a'
-    runImage = 'paketobuildpacks/run@sha256:ec0263dc98a8c785f4a6750597de8857efd2852fc6544494ff2598426cf7143c'
+    builder = 'paketobuildpacks/builder@sha256:b593898aebb714973fc859f0c27e554d876a437fb818940f8e729c655b92f8bc'
+    runImage = 'paketobuildpacks/run@sha256:b93a81a444084ff12acbbfbff6f1ad645125972d0f28613d7bedf1761327973b'
     environment = [
-            "BPE_DELIM_JAVA_TOOL_OPTIONS"       : " ",
-            "BPE_APPEND_JAVA_TOOL_OPTIONS"      : "-Dfile.encoding=UTF-8",
-            "BP_SPRING_CLOUD_BINDINGS_DISABLED" : "true",
+            "BPE_DELIM_JAVA_TOOL_OPTIONS"      : " ",
+            "BPE_APPEND_JAVA_TOOL_OPTIONS"     : "-Dfile.encoding=UTF-8",
+            "BP_SPRING_CLOUD_BINDINGS_DISABLED": "true",
     ]
     publish = false
 }
-
-import org.gradle.internal.os.OperatingSystem
 
 jib {
     from {
