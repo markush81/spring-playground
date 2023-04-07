@@ -1,8 +1,9 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.google.cloud.tools.jib' version '3.3.1'
+    id "com.gorylenko.gradle-git-properties" version "2.4.1"
 }
 
 // === Repository config ===
@@ -25,8 +26,8 @@ configurations {
 dependencies {
     otel 'io.opentelemetry.javaagent:opentelemetry-javaagent'
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.23.0")
-    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.23.0-alpha')
+    implementation platform("io.opentelemetry:opentelemetry-bom:1.24.0")
+    implementation platform('io.opentelemetry:opentelemetry-bom-alpha:1.24.0-alpha')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -42,7 +43,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
 
@@ -50,7 +51,7 @@ test {
     exclude '**/*IntegrationTest*'
 }
 
-task integrationTest(type: Test) {
+tasks.register("integrationTest", Test) {
     group 'verification'
     include '**/*IntegrationTest*'
     it.mustRunAfter test
@@ -95,15 +96,17 @@ bootBuildImage {
     publish = false
 }
 
+import org.gradle.internal.os.OperatingSystem
+
 jib {
-//    from {
-//        platforms {
-//            platform {
-//                architecture = "arm64"
-//                os = "linux"
-//            }
-//        }
-//    }
+    from {
+        platforms {
+            platform {
+                architecture = "${OperatingSystem.current().getArch() == 'aarch64' ? 'arm64' : 'amd64'}"
+                os = "${OperatingSystem.current().isWindows() ? 'windows' : 'linux'}"
+            }
+        }
+    }
     to {
         image = "spring-playground"
     }
