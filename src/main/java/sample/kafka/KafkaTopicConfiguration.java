@@ -10,12 +10,6 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class KafkaTopicConfiguration {
 
-    private KafkaProperties kafkaProperties;
-
-    KafkaTopicConfiguration(final KafkaProperties kafkaProperties) {
-        this.kafkaProperties = kafkaProperties;
-    }
-
     @Bean
     public NewTopic sample() {
         return new NewTopic("sample", 4, (short) 1);

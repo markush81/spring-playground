@@ -19,7 +19,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 @Configuration
 public class KafkaConsumerConfiguration {
 
-    private KafkaProperties kafkaProperties;
+    private final KafkaProperties kafkaProperties;
 
     KafkaConsumerConfiguration(final KafkaProperties kafkaProperties) {
         this.kafkaProperties = kafkaProperties;

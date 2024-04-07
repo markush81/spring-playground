@@ -26,7 +26,7 @@ Add your CA(s) as PEM to `bindings/ca-certificates`.
 Run the containern with `--env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates"`
 
 ```bash
-docker container run --rm --name spring-playground --env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates" -p 8080:8080 docker.io/library/spring-playground:latest  
+docker container run --rm --name spring-playground --env SERVICE_BINDING_ROOT=/bindings --volume "$(pwd)/bindings/ca-certificates:/bindings/ca-certificates" -p 8080:8080 docker.io/library/spring-playground:1.0.0  
 ```
 In output - at the very beginning - sth. like 
 

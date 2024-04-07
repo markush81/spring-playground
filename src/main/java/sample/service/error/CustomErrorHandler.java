@@ -1,5 +1,6 @@
 package sample.service.error;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,14 @@ public class CustomErrorHandler implements ErrorController {
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        Integer statusCode = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (statusCode == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         try {
             return HttpStatus.valueOf(statusCode);
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (Exception ex) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

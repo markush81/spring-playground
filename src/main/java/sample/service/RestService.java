@@ -20,7 +20,7 @@ import sample.persistence.model.User;
 import sample.service.model.Greeting;
 
 @RestController
-@RequestMapping(path = "/service", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class RestService {
 
     private final UserRepository userRepository;

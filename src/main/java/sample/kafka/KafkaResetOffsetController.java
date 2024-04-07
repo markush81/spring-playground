@@ -2,6 +2,7 @@ package sample.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.kafka.clients.admin.AdminClient;
@@ -29,12 +30,11 @@ public class KafkaResetOffsetController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaResetOffsetController.class);
 
-    private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
-    private KafkaProperties kafkaProperties;
-    private AdminClient adminClient;
+    private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
+    private final AdminClient adminClient;
 
     KafkaResetOffsetController(final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry, final KafkaProperties kafkaProperties) {
-        this.adminClient = AdminClient.create(kafkaProperties.buildAdminProperties());
+        this.adminClient = AdminClient.create(kafkaProperties.buildAdminProperties(null));
         this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
     }
 
@@ -42,10 +42,10 @@ public class KafkaResetOffsetController {
     public ResponseEntity<Greeting> resetGroupToOffset(@PathVariable String groupId, @PathVariable String topic, @PathVariable(required = false) Optional<Long> offset) {
         LOGGER.info("Reseting {} to {}", topic, offset);
         kafkaListenerEndpointRegistry.getAllListenerContainers().forEach(messageListenerContainer -> {
-            if (messageListenerContainer.getGroupId().equals(groupId)) {
+            if (Objects.equals(messageListenerContainer.getGroupId(), groupId)) {
                 var newOffset = new OffsetAndMetadata(offset.orElse(0L));
                 var offsets = new HashMap<TopicPartition, OffsetAndMetadata>();
-                messageListenerContainer.getAssignedPartitions().forEach(topicPartition -> {
+                Objects.requireNonNull(messageListenerContainer.getAssignedPartitions()).forEach(topicPartition -> {
                     if (topicPartition.topic().equals(topic)) {
                         offsets.put(topicPartition, newOffset);
                     }

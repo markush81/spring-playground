@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.2'
-    id 'io.spring.dependency-management' version '1.1.2'
-    id 'com.google.cloud.tools.jib' version '3.3.2'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'com.google.cloud.tools.jib' version '3.4.2'
     id 'com.gorylenko.gradle-git-properties' version '2.4.1'
-    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.8'
 }
 
 // === Repository config ===
@@ -26,16 +26,15 @@ configurations {
 // === Properties ===
 
 ext {
-    otelVersion = '1.28.0'
+    otelVersion = '1.36.0'
     mainClassName = 'sample.Application'
 }
 
 // === Dependencies ===
 dependencies {
-    otel "io.opentelemetry.javaagent:opentelemetry-javaagent:$otelVersion"
+    otel "io.opentelemetry.javaagent:opentelemetry-javaagent"
 
     implementation platform("io.opentelemetry:opentelemetry-bom:$otelVersion")
-    implementation platform("io.opentelemetry:opentelemetry-bom-alpha:$otelVersion-alpha")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -53,6 +52,10 @@ dependencies {
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
 }
 
 test {
@@ -86,6 +89,11 @@ import org.jetbrains.gradle.ext.JUnit
 import static org.jetbrains.gradle.ext.ActionDelegationConfig.TestRunner.PLATFORM
 
 idea.project.settings {
+    compiler {
+        javac {
+            javacAdditionalOptions "-parameters"
+        }
+    }
     delegateActions {
         delegateBuildRunToGradle = false
         testRunner = PLATFORM
@@ -129,8 +137,8 @@ bootBuildImage {
     verboseLogging = true
 
     //fix version of used images
-    builder = 'paketobuildpacks/builder@sha256:b593898aebb714973fc859f0c27e554d876a437fb818940f8e729c655b92f8bc'
-    runImage = 'paketobuildpacks/run@sha256:b93a81a444084ff12acbbfbff6f1ad645125972d0f28613d7bedf1761327973b'
+    builder = 'paketobuildpacks/builder-jammy-base@sha256:9bb4d01f8d42ccb9aa3b6b10a5876c8913e3ba9709882f18c9bd8c54f46d862b'
+    runImage = 'paketobuildpacks/run-jammy-base@sha256:8431203470391fc58454b71bdb917f53c20f403892fbb447f4ea5265a8d7cf49'
     environment = [
             "BPE_DELIM_JAVA_TOOL_OPTIONS"      : " ",
             "BPE_APPEND_JAVA_TOOL_OPTIONS"     : "-Dfile.encoding=UTF-8",

@@ -16,7 +16,7 @@ public class KafkaListeners {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaListeners.class);
 
     @KafkaHandler(isDefault = true)
-    public void consume(ConsumerRecord record) {
+    public void consume(ConsumerRecord<?,?> record) {
         LOGGER.info("{}", record);
     }
 }

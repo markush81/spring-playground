@@ -3,6 +3,7 @@ package sample.persistence.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,20 +16,22 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    private String firstName;
-    private String lastName;
+    @JsonProperty
+    private String firstname;
+    @JsonProperty
+    private String lastname;
 
     public User() {
     }
 
-    public User(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String firstname, String lastname) {
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(firstname, lastname);
     }
 
     @Override
@@ -40,16 +43,16 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName);
+        return Objects.equals(firstname, user.firstname) &&
+                Objects.equals(lastname, user.lastname);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 '}';
     }
 }
